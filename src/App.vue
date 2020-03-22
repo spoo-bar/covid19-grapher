@@ -1,24 +1,21 @@
 <template>
   <div id="app">
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <a class="navbar-brand" href="#">COVID19</a>
+      <router-link to="/" class="navbar-brand">COVID19</router-link>
       <button
         class="navbar-toggler"
         type="button"
         data-toggle="collapse"
-        data-target="#navbarColor02"
-        aria-controls="navbarColor02"
-        aria-expanded="false"
+        data-target="#navbarDropdown"
+        aria-controls="navbarDropdown"
+        aria-expanded="true"
         aria-label="Toggle navigation"
       >
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse" id="navbarColor02">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <router-link to="/" class="nav-link">Home</router-link>
-          </li>
+      <div class="collapse navbar-collapse" id="navbarDropdown">
+        <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <router-link to="/about" class="nav-link">About</router-link>
           </li>
