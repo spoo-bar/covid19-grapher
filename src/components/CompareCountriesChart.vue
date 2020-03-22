@@ -41,12 +41,16 @@
 </template>
 
 <script>
+import { Chart } from "highcharts-vue";
 import Countries from "../assets/countries.json";
 import NewCases from "../assets/new_cases.json";
 import SmoothNewCases from "../assets/smooth_new_cases.json";
 
 export default {
   name: "CompareCountriesChart",
+  components: {
+    highcharts: Chart
+  },
   data() {
     return {
       chartOptions: {
@@ -72,6 +76,10 @@ export default {
         ],
         title: {
           text: "Placeholder title"
+        },
+        tooltip: {
+            useHTML: true,
+            headerFormat: '<small>Day {point.key}</small><br/>'
         },
         xAxis: [
           {
