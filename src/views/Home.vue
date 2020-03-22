@@ -1,18 +1,28 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Has the country flattened the curve?</h4>
+        <NewCasesChart />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import NewCasesChart from "@/components/NewCasesChart.vue";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
-    HelloWorld
+    NewCasesChart
   }
-}
+};
 </script>
+
+<style>
+.home {
+  margin-top: 2rem;
+}
+</style>
