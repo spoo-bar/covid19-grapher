@@ -1,7 +1,7 @@
 <template>
   <div class="new-cases">
     <div class="row">
-      <div class="col col-lg-3">
+      <div class="col col-lg-3 col-sm-12">
         <div>
           <p class="card-text"><small>Seven day average is calculated to smoothen the day-to-day anomalies  </small></p>
           <br />
@@ -16,7 +16,7 @@
           </select>
         </div>
       </div>
-      <div class="col col-log-9">
+      <div class="col col-lg-9 col-sm-12">
         <highcharts :options="chartOptions"></highcharts>
       </div>
     </div>
