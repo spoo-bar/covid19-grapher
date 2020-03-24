@@ -11,25 +11,25 @@
               id="useSevenDayAverage"
               v-model="useSevenDayAverage"
               v-bind:value="false"
-              v-on:change="changeDataSource()"
+              v-on:change="setSelectedCountryData()"
             />
             <label class="custom-control-label" for="useSevenDayAverage">Use seven day average</label>
           </div>
           <br />
           <select name="country" id="country1" class="form-control" @change="changeCountry1">
             <option
-              v-for="(country, index) in countries"
+              v-for="(country, index) in data.Data"
               :key="index"
-              :value="country"
-            >{{ country }}</option>
+              :value="country.Name"
+            >{{ country.Name }}</option>
           </select>
           <br />
           <select name="country" id="country2" class="form-control" @change="changeCountry2">
             <option
-              v-for="(country, index) in countries"
+              v-for="(country, index) in data.Data"
               :key="index"
-              :value="country"
-            >{{ country }}</option>
+              :value="country.Name"
+            >{{ country.Name }}</option>
           </select>
         </div>
       </div>
@@ -45,6 +45,7 @@ import { Chart } from "highcharts-vue";
 import Countries from "../assets/countries.json";
 import NewCases from "../assets/new_cases.json";
 import SmoothNewCases from "../assets/smooth_new_cases.json";
+import Data from "../assets/data.json";
 
 export default {
   name: "CompareCountriesChart",
@@ -78,8 +79,8 @@ export default {
           text: "Placeholder title"
         },
         tooltip: {
-            useHTML: true,
-            headerFormat: '<small>Day {point.key}</small><br/>'
+          useHTML: true,
+          headerFormat: "<small>Day {point.key}</small><br/>"
         },
         xAxis: [
           {
@@ -109,40 +110,44 @@ export default {
       smoothNewCases: SmoothNewCases,
       country1: "World",
       country2: "World",
-      useSevenDayAverage: false
+      useSevenDayAverage: false,
+      data: Data,
+      selectedCountryOne: undefined,
+      selectedCountryTwo: undefined
     };
   },
   methods: {
     changeCountry1: function(e) {
       let selectedCountry = e.target.options[event.target.selectedIndex].text;
-      this.country1 = selectedCountry;
-      this.chartOptions.title.text = this.country1 + " vs " + this.country2;
-      this.chartOptions.series[0].data = this.getCovidData(selectedCountry);
-      this.chartOptions.series[0].name = this.country1;
+      this.selectedCountryOne = this.data.Data.filter(
+        c => c.Name === selectedCountry
+      )[0];
+      this.setSelectedCountryData();
     },
     changeCountry2: function(e) {
       let selectedCountry = e.target.options[event.target.selectedIndex].text;
-      this.country2 = selectedCountry;
-      this.chartOptions.title.text = this.country1 + " vs " + this.country2;
-      this.chartOptions.series[1].data = this.getCovidData(selectedCountry);
-      this.chartOptions.series[1].name = this.country2;
+      this.selectedCountryTwo = this.data.Data.filter(
+        c => c.Name === selectedCountry
+      )[0];
+      this.setSelectedCountryData();
     },
-    changeDataSource: function() {
-      this.chartOptions.series[0].data = this.getCovidData(this.country1);
-      this.chartOptions.series[1].data = this.getCovidData(this.country2);
-    },
-    getCovidData: function(countryName) {
+    getCovidData: function(country) {
       if (this.useSevenDayAverage) {
-        return this.smoothNewCases[countryName];
+        return country.NewCases.SevenDayAvgSinceFirstCase;
       } else {
-        return this.newCases[countryName];
+        return country.NewCases.DayCountSinceFirstCase;
       }
+    },
+    setSelectedCountryData: function() {
+      this.chartOptions.title.text = this.selectedCountryOne.Name + " vs " + this.selectedCountryTwo.Name;
+      this.chartOptions.series[0].data = this.getCovidData(this.selectedCountryOne);
+      this.chartOptions.series[1].data = this.getCovidData(this.selectedCountryTwo);
     }
   },
   mounted: function() {
-    this.chartOptions.title.text = "World vs World";
-    this.chartOptions.series[0].data = this.newCases["World"];
-    this.chartOptions.series[1].data = this.newCases["World"];
+    this.selectedCountryOne = this.data.Data.filter(c => c.Name === "World")[0];
+    this.selectedCountryTwo = this.data.Data.filter(c => c.Name === "World")[0];
+    this.setSelectedCountryData();
   }
 };
 </script>
