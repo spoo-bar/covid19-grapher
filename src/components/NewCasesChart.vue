@@ -9,7 +9,7 @@
           <br />
         </div>
         <div class="form-group">
-          <select name="country" id="country" class="form-control" @change="changeCountry">
+          <select name="country" id="country" class="form-control" v-model="selectedCountry.Name" @change="changeCountry">
             <option
               v-for="(country, index) in data.Data"
               :key="index"
@@ -103,10 +103,19 @@ export default {
       this.chartOptions.title.text = this.selectedCountry.Name;
       this.chartOptions.series[0].data = this.selectedCountry.NewCases.DayCountSinceFirstCase;
       this.chartOptions.series[1].data = this.selectedCountry.NewCases.SevenDayAvgSinceFirstCase;
+    },
+    getDefaultCountry: function() {
+      let defaultCountry = localStorage.getItem('defaultCountry');
+      if (defaultCountry) {
+        return defaultCountry;
+      }
+      else {
+        return "World";
+      }
     }
   },
   mounted: function() {
-    this.selectedCountry = this.data.Data.filter(c => c.Name === "World")[0];
+    this.selectedCountry = this.data.Data.filter(c => c.Name === this.getDefaultCountry())[0];
     this.setSelectedCountryData();
   }
 };

@@ -4,7 +4,7 @@
       <div class="col col-lg-4 col-sm-12">
         <h6 class="card-subtitle mb-2 text-muted">Select a country</h6>
         <div class="form-group">
-          <select name="country" id="country" class="form-control" @change="changeCountry">
+          <select name="country" id="country" class="form-control" v-model="selectedCountry.Name" @change="changeCountry">
             <option
               v-for="(country, index) in data.Data"
               :key="index"
@@ -56,28 +56,7 @@ export default {
           {
             type: "spline",
             name: "Seven day average",
-            data: [
-              2,
-              1,
-              22,
-              1,
-              2,
-              3,
-              0,
-              10,
-              6,
-              23,
-              2,
-              8,
-              7,
-              3,
-              32,
-              12,
-              28,
-              26,
-              40,
-              89
-            ],
+            data: [],
             color: "#aaa",
             marker: {
               enabled: false
@@ -119,7 +98,7 @@ export default {
           {
             type: "spline",
             name: "Seven day average",
-            data: [2, 1, 22, 1, 23, 2, 8, 7, 3, 32, 12, 28, 26, 40, 89],
+            data: [],
             color: "#aaa",
             marker: {
               enabled: false
@@ -150,7 +129,7 @@ export default {
         ]
       },
       data: Data,
-      selectedCountry: undefined
+      selectedCountry: undefined,
     };
   },
   filters: {
@@ -173,10 +152,19 @@ export default {
     setSelectedCountryData: function() {
       this.confirmedChartOptions.series[0].data = this.selectedCountry.TotalCases.DayCountSinceFirstCase;
       this.deathChartOptions.series[0].data = this.selectedCountry.NewDeaths.DayCountSinceFirstCase;
+    },
+    getDefaultCountry: function() {
+      let defaultCountry = localStorage.getItem('defaultCountry');
+      if (defaultCountry) {
+        return defaultCountry;
+      }
+      else {
+        return "World";
+      }
     }
   },
   mounted: function() {
-    this.selectedCountry = this.data.Data.filter(c => c.Name === "World")[0];
+    this.selectedCountry = this.data.Data.filter(c => c.Name === this.getDefaultCountry())[0];
     this.setSelectedCountryData();
   }
 };
