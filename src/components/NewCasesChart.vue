@@ -13,7 +13,7 @@
             name="country"
             id="country"
             class="form-control"
-            v-model="selectedCountry.Name"
+            v-model="selectedCountryName"
             @change="changeCountry"
           >
             <option
@@ -93,9 +93,8 @@ export default {
         ]
       },
       data: Data,
-      selectedCountry: {
-        Name: ""
-      }
+      selectedCountry: undefined,
+      selectedCountryName: ''
     };
   },
   methods: {
@@ -121,8 +120,9 @@ export default {
     }
   },
   mounted: function() {
+    this.selectedCountryName = this.getDefaultCountry();
     this.selectedCountry = this.data.Data.filter(
-      c => c.Name === this.getDefaultCountry()
+      c => c.Name === this.selectedCountryName
     )[0];
     this.setSelectedCountryData();
   }

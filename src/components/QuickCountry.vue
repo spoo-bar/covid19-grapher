@@ -8,7 +8,7 @@
             name="country"
             id="country"
             class="form-control"
-            v-model="selectedCountry.Name"
+            v-model="selectedCountryName"
             @change="changeCountry"
           >
             <option
@@ -20,19 +20,19 @@
         </div>
         <div>
           <p class="card-text">
-            <small>First case : {{ this.selectedCountry.FirstCaseDate | toLocaleDateString }}</small>
+            <small v-if="this.selectedCountry !== undefined">First case : {{ this.selectedCountry.FirstCaseDate | toLocaleDateString }}</small>
           </p>
           <br />
         </div>
       </div>
       <div class="col col-lg-4 col-sm-12">
         <h6 class="card-subtitle mb-2 text-muted">Confirmed Cases</h6>
-        <h1 class="text-warning">{{ this.selectedCountry.TotalCasesCount | toLocaleNumberString }}</h1>
+        <h1 class="text-warning" v-if="this.selectedCountry !== undefined">{{ this.selectedCountry.TotalCasesCount | toLocaleNumberString }}</h1>
         <highcharts :options="confirmedChartOptions"></highcharts>
       </div>
       <div class="col col-lg-4 col-sm-12">
         <h6 class="card-subtitle mb-2 text-muted">Deaths</h6>
-        <h1 class="text-danger">{{ this.selectedCountry.TotalDeathsCount | toLocaleNumberString }}</h1>
+        <h1 class="text-danger" v-if="this.selectedCountry !== undefined">{{ this.selectedCountry.TotalDeathsCount | toLocaleNumberString }}</h1>
         <highcharts :options="deathChartOptions"></highcharts>
       </div>
     </div>
@@ -135,9 +135,8 @@ export default {
         ]
       },
       data: Data,
-      selectedCountry: {
-        Name: ""
-      }
+      selectedCountry: undefined,
+      selectedCountryName: ''
     };
   },
   filters: {
@@ -171,8 +170,9 @@ export default {
     }
   },
   mounted: function() {
+    this.selectedCountryName = this.getDefaultCountry();
     this.selectedCountry = this.data.Data.filter(
-      c => c.Name === this.getDefaultCountry()
+      c => c.Name === this.selectedCountryName
     )[0];
     this.setSelectedCountryData();
   }

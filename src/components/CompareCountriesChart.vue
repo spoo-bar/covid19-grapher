@@ -20,7 +20,7 @@
             name="country"
             id="country1"
             class="form-control"
-            v-model="selectedCountryOne.Name"
+            v-model="selectedCountryOneName"
             @change="changeCountry1"
           >
             <option
@@ -30,13 +30,7 @@
             >{{ country.Name }}</option>
           </select>
           <br />
-          <select
-            name="country"
-            id="country2"
-            class="form-control"
-            v-model="selectedCountryTwo.Name"
-            @change="changeCountry2"
-          >
+          <select name="country" id="country2" class="form-control" @change="changeCountry2">
             <option
               v-for="(country, index) in data.Data"
               :key="index"
@@ -116,12 +110,9 @@ export default {
       },
       useSevenDayAverage: false,
       data: Data,
-      selectedCountryOne: {
-        Name: ""
-      },
-      selectedCountryTwo: {
-        Name: ""
-      }
+      selectedCountryOne: undefined,
+      selectedCountryTwo: undefined,
+      selectedCountryOneName: ""
     };
   },
   methods: {
@@ -149,9 +140,11 @@ export default {
     setSelectedCountryData: function() {
       this.chartOptions.title.text =
         this.selectedCountryOne.Name + " vs " + this.selectedCountryTwo.Name;
+      this.chartOptions.series[0].name = this.selectedCountryOne.Name;
       this.chartOptions.series[0].data = this.getCovidData(
         this.selectedCountryOne
       );
+      this.chartOptions.series[1].name = this.selectedCountryTwo.Name;
       this.chartOptions.series[1].data = this.getCovidData(
         this.selectedCountryTwo
       );
@@ -166,8 +159,9 @@ export default {
     }
   },
   mounted: function() {
+    this.selectedCountryOneName = this.getDefaultCountry();
     this.selectedCountryOne = this.data.Data.filter(
-      c => c.Name === this.getDefaultCountry()
+      c => c.Name === this.selectedCountryOneName
     )[0];
     this.selectedCountryTwo = this.data.Data.filter(c => c.Name === "World")[0];
     this.setSelectedCountryData();
