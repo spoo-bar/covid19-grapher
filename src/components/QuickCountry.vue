@@ -1,0 +1,194 @@
+<template>
+  <div class="new-cases">
+    <div class="row">
+      <div class="col col-lg-4 col-sm-12">
+        <h6 class="card-subtitle mb-2 text-muted">Select a country</h6>
+        <div class="form-group">
+          <select name="country" id="country" class="form-control" @change="changeCountry">
+            <option
+              v-for="(country, index) in data.Data"
+              :key="index"
+              :value="country.Name"
+            >{{ country.Name }}</option>
+          </select>
+        </div>
+        <div>
+          <p class="card-text">
+            <small>First case : {{ this.selectedCountry.FirstCaseDate | toLocaleDateString }}</small>
+          </p>
+          <br />
+        </div>
+      </div>
+      <div class="col col-lg-4 col-sm-12">
+        <h6 class="card-subtitle mb-2 text-muted">Confirmed Cases</h6>
+        <h1 class="text-warning">{{  this.selectedCountry.TotalCasesCount | toLocaleNumberString }}</h1>
+        <highcharts :options="confirmedChartOptions"></highcharts>
+      </div>
+      <div class="col col-lg-4 col-sm-12">
+        <h6 class="card-subtitle mb-2 text-muted">Deaths</h6>
+        <h1 class="text-danger">{{ this.selectedCountry.TotalDeathsCount | toLocaleNumberString }}</h1>
+        <highcharts :options="deathChartOptions"></highcharts>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { Chart } from "highcharts-vue";
+import Data from "../assets/data.json";
+
+export default {
+  name: "QuickCountry",
+  components: {
+    highcharts: Chart
+  },
+  data() {
+    return {
+      confirmedChartOptions: {
+        chart: {
+          height: "20%",
+          spacing: [0, 0, 0, 0]
+        },
+        credits: {
+          enabled: false
+        },
+        series: [
+          {
+            type: "spline",
+            name: "Seven day average",
+            data: [
+              2,
+              1,
+              22,
+              1,
+              2,
+              3,
+              0,
+              10,
+              6,
+              23,
+              2,
+              8,
+              7,
+              3,
+              32,
+              12,
+              28,
+              26,
+              40,
+              89
+            ],
+            color: "#aaa",
+            marker: {
+              enabled: false
+            },
+            showInLegend: false,
+            states: {
+              hover: {
+                enabled: false
+              }
+            }
+          }
+        ],
+        title: {
+          text: ""
+        },
+        tooltip: {
+          enabled: false
+        },
+        xAxis: [
+          {
+            visible: false
+          }
+        ],
+        yAxis: [
+          {
+            visible: false
+          }
+        ]
+      },
+      deathChartOptions: {
+        chart: {
+          height: "20%",
+          spacing: [0, 0, 0, 0]
+        },
+        credits: {
+          enabled: false
+        },
+        series: [
+          {
+            type: "spline",
+            name: "Seven day average",
+            data: [2, 1, 22, 1, 23, 2, 8, 7, 3, 32, 12, 28, 26, 40, 89],
+            color: "#aaa",
+            marker: {
+              enabled: false
+            },
+            showInLegend: false,
+            states: {
+              hover: {
+                enabled: false
+              }
+            }
+          }
+        ],
+        title: {
+          text: ""
+        },
+        tooltip: {
+          enabled: false
+        },
+        xAxis: [
+          {
+            visible: false
+          }
+        ],
+        yAxis: [
+          {
+            visible: false
+          }
+        ]
+      },
+      data: Data,
+      selectedCountry: undefined
+    };
+  },
+  filters: {
+    toLocaleNumberString(number) {
+      let locale = navigator.language;
+      return new Number(number).toLocaleString(locale);
+    },
+    toLocaleDateString(date) {
+      return new Date(date).toLocaleDateString();
+    },
+  },
+  methods: {
+    changeCountry: function(e) {
+      let selectedCountry = e.target.options[event.target.selectedIndex].text;
+      this.selectedCountry = this.data.Data.filter(
+        c => c.Name === selectedCountry
+      )[0];
+      this.setSelectedCountryData();
+    },
+    setSelectedCountryData: function() {
+      this.confirmedChartOptions.series[0].data = this.selectedCountry.TotalCases.DayCountSinceFirstCase;
+      this.deathChartOptions.series[0].data = this.selectedCountry.NewDeaths.DayCountSinceFirstCase;
+    }
+  },
+  mounted: function() {
+    this.selectedCountry = this.data.Data.filter(c => c.Name === "World")[0];
+    this.setSelectedCountryData();
+  }
+};
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+h1 {
+  margin-bottom: -0.35rem;
+}
+
+span.fav a {
+  text-decoration: none;
+}
+</style>

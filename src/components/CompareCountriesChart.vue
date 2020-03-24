@@ -42,9 +42,6 @@
 
 <script>
 import { Chart } from "highcharts-vue";
-import Countries from "../assets/countries.json";
-import NewCases from "../assets/new_cases.json";
-import SmoothNewCases from "../assets/smooth_new_cases.json";
 import Data from "../assets/data.json";
 
 export default {
@@ -105,11 +102,6 @@ export default {
           }
         ]
       },
-      countries: Countries,
-      newCases: NewCases,
-      smoothNewCases: SmoothNewCases,
-      country1: "World",
-      country2: "World",
       useSevenDayAverage: false,
       data: Data,
       selectedCountryOne: undefined,
