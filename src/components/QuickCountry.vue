@@ -4,7 +4,13 @@
       <div class="col col-lg-4 col-sm-12">
         <h6 class="card-subtitle mb-2 text-muted">Select a country</h6>
         <div class="form-group">
-          <select name="country" id="country" class="form-control" v-model="selectedCountry.Name" @change="changeCountry">
+          <select
+            name="country"
+            id="country"
+            class="form-control"
+            v-model="selectedCountry.Name"
+            @change="changeCountry"
+          >
             <option
               v-for="(country, index) in data.Data"
               :key="index"
@@ -21,7 +27,7 @@
       </div>
       <div class="col col-lg-4 col-sm-12">
         <h6 class="card-subtitle mb-2 text-muted">Confirmed Cases</h6>
-        <h1 class="text-warning">{{  this.selectedCountry.TotalCasesCount | toLocaleNumberString }}</h1>
+        <h1 class="text-warning">{{ this.selectedCountry.TotalCasesCount | toLocaleNumberString }}</h1>
         <highcharts :options="confirmedChartOptions"></highcharts>
       </div>
       <div class="col col-lg-4 col-sm-12">
@@ -129,7 +135,9 @@ export default {
         ]
       },
       data: Data,
-      selectedCountry: undefined,
+      selectedCountry: {
+        Name: ""
+      }
     };
   },
   filters: {
@@ -139,7 +147,7 @@ export default {
     },
     toLocaleDateString(date) {
       return new Date(date).toLocaleDateString();
-    },
+    }
   },
   methods: {
     changeCountry: function(e) {
@@ -154,17 +162,18 @@ export default {
       this.deathChartOptions.series[0].data = this.selectedCountry.NewDeaths.DayCountSinceFirstCase;
     },
     getDefaultCountry: function() {
-      let defaultCountry = localStorage.getItem('defaultCountry');
+      let defaultCountry = localStorage.getItem("defaultCountry");
       if (defaultCountry) {
         return defaultCountry;
-      }
-      else {
+      } else {
         return "World";
       }
     }
   },
   mounted: function() {
-    this.selectedCountry = this.data.Data.filter(c => c.Name === this.getDefaultCountry())[0];
+    this.selectedCountry = this.data.Data.filter(
+      c => c.Name === this.getDefaultCountry()
+    )[0];
     this.setSelectedCountryData();
   }
 };

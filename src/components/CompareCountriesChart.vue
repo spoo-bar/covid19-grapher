@@ -16,7 +16,13 @@
             <label class="custom-control-label" for="useSevenDayAverage">Use seven day average</label>
           </div>
           <br />
-          <select name="country" id="country1" class="form-control" v-model="selectedCountryOne.Name" @change="changeCountry1">
+          <select
+            name="country"
+            id="country1"
+            class="form-control"
+            v-model="selectedCountryOne.Name"
+            @change="changeCountry1"
+          >
             <option
               v-for="(country, index) in data.Data"
               :key="index"
@@ -24,7 +30,13 @@
             >{{ country.Name }}</option>
           </select>
           <br />
-          <select name="country" id="country2" class="form-control" v-model="selectedCountryTwo.Name" @change="changeCountry2">
+          <select
+            name="country"
+            id="country2"
+            class="form-control"
+            v-model="selectedCountryTwo.Name"
+            @change="changeCountry2"
+          >
             <option
               v-for="(country, index) in data.Data"
               :key="index"
@@ -104,8 +116,12 @@ export default {
       },
       useSevenDayAverage: false,
       data: Data,
-      selectedCountryOne: undefined,
-      selectedCountryTwo: undefined
+      selectedCountryOne: {
+        Name: ""
+      },
+      selectedCountryTwo: {
+        Name: ""
+      }
     };
   },
   methods: {
@@ -131,22 +147,28 @@ export default {
       }
     },
     setSelectedCountryData: function() {
-      this.chartOptions.title.text = this.selectedCountryOne.Name + " vs " + this.selectedCountryTwo.Name;
-      this.chartOptions.series[0].data = this.getCovidData(this.selectedCountryOne);
-      this.chartOptions.series[1].data = this.getCovidData(this.selectedCountryTwo);
+      this.chartOptions.title.text =
+        this.selectedCountryOne.Name + " vs " + this.selectedCountryTwo.Name;
+      this.chartOptions.series[0].data = this.getCovidData(
+        this.selectedCountryOne
+      );
+      this.chartOptions.series[1].data = this.getCovidData(
+        this.selectedCountryTwo
+      );
     },
     getDefaultCountry: function() {
-      let defaultCountry = localStorage.getItem('defaultCountry');
+      let defaultCountry = localStorage.getItem("defaultCountry");
       if (defaultCountry) {
         return defaultCountry;
-      }
-      else {
+      } else {
         return "World";
       }
     }
   },
   mounted: function() {
-    this.selectedCountryOne = this.data.Data.filter(c => c.Name === this.getDefaultCountry())[0];
+    this.selectedCountryOne = this.data.Data.filter(
+      c => c.Name === this.getDefaultCountry()
+    )[0];
     this.selectedCountryTwo = this.data.Data.filter(c => c.Name === "World")[0];
     this.setSelectedCountryData();
   }

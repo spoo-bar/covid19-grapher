@@ -33,7 +33,11 @@
             <p class="card-text">
               <small>
                 Download the data used for these visualizations as JSON.
-                <a href="/schema.json" download="schema.json" target="_blank">[Schema]</a>
+                <a
+                  href="/schema.json"
+                  download="schema.json"
+                  target="_blank"
+                >[Schema]</a>
               </small>
             </p>
           </div>

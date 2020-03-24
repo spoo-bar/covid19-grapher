@@ -20,7 +20,11 @@
             <router-link to="/about" class="nav-link">About</router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link" target="_blank" href="https://ourworldindata.org/coronavirus-source-data">Sources</a>
+            <a
+              class="nav-link"
+              target="_blank"
+              href="https://ourworldindata.org/coronavirus-source-data"
+            >Sources</a>
           </li>
         </ul>
       </div>

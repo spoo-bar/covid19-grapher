@@ -1,7 +1,13 @@
 <template>
   <div class="new-cases">
     <div class="form-group">
-      <select name="country" id="country" class="form-control" v-model="selectedCountry" @change="changeCountry">
+      <select
+        name="country"
+        id="country"
+        class="form-control"
+        v-model="selectedCountry"
+        @change="changeCountry"
+      >
         <option
           v-for="(country, index) in data.Data"
           :key="index"
@@ -21,27 +27,28 @@ export default {
   data() {
     return {
       data: Data,
-      selectedCountry: undefined,
+      selectedCountry: undefined
     };
   },
   methods: {
     changeCountry: function(e) {
       let selectedCountry = e.target.options[event.target.selectedIndex].text;
-      localStorage.setItem('defaultCountry', selectedCountry);
+      localStorage.setItem("defaultCountry", selectedCountry);
       location.reload();
     },
     getDefaultCountry: function() {
-      let defaultCountry = localStorage.getItem('defaultCountry');
+      let defaultCountry = localStorage.getItem("defaultCountry");
       if (defaultCountry) {
         return defaultCountry;
-      }
-      else {
+      } else {
         return "World";
       }
     }
   },
   mounted: function() {
-    this.selectedCountry = this.data.Data.filter(c => c.Name === this.getDefaultCountry())[0];
+    this.selectedCountry = this.data.Data.filter(
+      c => c.Name === this.getDefaultCountry()
+    )[0];
     this.selectedCountry = this.selectedCountry.Name;
   }
 };

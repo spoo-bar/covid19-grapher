@@ -19,7 +19,7 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    setDefaultCountry(state,  payload) {
+    setDefaultCountry(state, payload) {
       state.defaultCountry = payload;
       localStorage.setItem('defaultCountry', payload);
     }
