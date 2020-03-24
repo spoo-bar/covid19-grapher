@@ -3,16 +3,18 @@
     <div class="row">
       <div class="col col-lg-3 col-sm-12">
         <div>
-          <p class="card-text"><small>Seven day average is calculated to smoothen the day-to-day anomalies  </small></p>
+          <p class="card-text">
+            <small>Seven day average is calculated to smoothen the day-to-day anomalies</small>
+          </p>
           <br />
         </div>
         <div class="form-group">
           <select name="country" id="country" class="form-control" @change="changeCountry">
             <option
-              v-for="(country, index) in countries"
+              v-for="(country, index) in data.Data"
               :key="index"
-              :value="country"
-            >{{ country }}</option>
+              :value="country.Name"
+            >{{ country.Name }}</option>
           </select>
         </div>
       </div>
@@ -24,16 +26,13 @@
 </template>
 
 <script>
-
-import {Chart} from 'highcharts-vue';
-import Countries from "../assets/countries.json";
-import NewCases from "../assets/new_cases.json";
-import SmoothNewCases from "../assets/smooth_new_cases.json";
+import { Chart } from "highcharts-vue";
+import Data from "../assets/data.json";
 
 export default {
   name: "NewCasesChart",
   components: {
-      highcharts: Chart
+    highcharts: Chart
   },
   data() {
     return {
@@ -60,9 +59,9 @@ export default {
           text: "Placeholder title"
         },
         tooltip: {
-            shared: true,
-            useHTML: true,
-            headerFormat: '<small>Day {point.key}</small><br/>'
+          shared: true,
+          useHTML: true,
+          headerFormat: "<small>Day {point.key}</small><br/>"
         },
         xAxis: [
           {
@@ -87,23 +86,28 @@ export default {
           }
         ]
       },
-      countries: Countries,
-      newCases: NewCases,
-      smoothNewCases: SmoothNewCases
+      data: Data,
+      selectedCountry: undefined
     };
   },
   methods: {
     changeCountry: function(e) {
       let selectedCountry = e.target.options[event.target.selectedIndex].text;
-      this.chartOptions.title.text = selectedCountry;
-      this.chartOptions.series[0].data = this.newCases[selectedCountry];
-      this.chartOptions.series[1].data = this.smoothNewCases[selectedCountry];
+      this.selectedCountry = this.data.Data.filter(
+        c => c.Name === selectedCountry
+      )[0];
+      this.setSelectedCountryData();
+    },
+    setSelectedCountryData: function() {
+      console.log(this.selectedCountry);
+      this.chartOptions.title.text = this.selectedCountry.Name;
+      this.chartOptions.series[0].data = this.selectedCountry.NewCases.DayCountSinceFirstCase;
+      this.chartOptions.series[1].data = this.selectedCountry.NewCases.SevenDayAvgSinceFirstCase;
     }
   },
   mounted: function() {
-    this.chartOptions.title.text = "World";
-    this.chartOptions.series[0].data = this.newCases["World"];
-    this.chartOptions.series[1].data = this.smoothNewCases["World"];
+    this.selectedCountry = this.data.Data.filter(c => c.Name === "World")[0];
+    this.setSelectedCountryData();
   }
 };
 </script>
