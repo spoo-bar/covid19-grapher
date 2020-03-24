@@ -40,4 +40,7 @@
 </template>
 
 <style scoped>
+button.navbar-toggler {
+  border: none;
+}
 </style>
