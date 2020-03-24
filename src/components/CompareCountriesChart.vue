@@ -1,7 +1,7 @@
 <template>
   <div class="new-cases">
     <div class="row">
-      <div class="col col-lg-3 col-sm-12">
+      <div class="col-lg-3 col-sm-12">
         <div class="form-group">
           <br />
           <div class="custom-control custom-switch">
@@ -39,7 +39,7 @@
           </select>
         </div>
       </div>
-      <div class="col col-lg-9 col-sm-12">
+      <div class="col-lg-9 col-sm-12">
         <highcharts :options="chartOptions"></highcharts>
       </div>
     </div>

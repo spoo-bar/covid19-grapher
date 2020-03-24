@@ -20,7 +20,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-2">
+      <div class="d-none d-lg-block col-lg-2">
         <div class="card">
           <div class="card-body download-card">
             <h5 class="card-title">Download</h5>
