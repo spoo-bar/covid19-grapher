@@ -37,7 +37,7 @@
       </div>
       <div class="col-lg-3 col-sm-12">
         <h6 class="card-subtitle mb-2 text-muted">Death Rate</h6>
-        <h1 class="text-danger" v-if="this.selectedCountry !== undefined">{{ this.selectedCountry | getDeathRate }} %</h1>
+        <h1 class="text-danger" v-if="this.selectedCountry !== undefined">{{ this.selectedCountry | getDeathRate }}<small>%</small></h1>
       </div>
     </div>
   </div>

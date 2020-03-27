@@ -58,6 +58,9 @@ export default {
   data() {
     return {
       chartOptions: {
+        credits: {
+          enabled: false
+        },
         series: [
           {
             type: "spline",
