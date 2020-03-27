@@ -1,7 +1,7 @@
 <template>
   <div class="new-cases">
     <div class="row">
-      <div class="col-lg-4 col-sm-12">
+      <div class="col-lg-3 col-sm-12">
         <h6 class="card-subtitle mb-2 text-muted">Select a country</h6>
         <div class="form-group">
           <select
@@ -25,15 +25,19 @@
           <br />
         </div>
       </div>
-      <div class="col-lg-4 col-sm-12">
+      <div class="col-lg-3 col-sm-12">
         <h6 class="card-subtitle mb-2 text-muted">Confirmed Cases</h6>
-        <h1 class="text-warning" v-if="this.selectedCountry !== undefined">{{ this.selectedCountry.TotalCasesCount | toLocaleNumberString }}</h1>
+        <h1 class="text-info" v-if="this.selectedCountry !== undefined">{{ this.selectedCountry.TotalCasesCount | toLocaleNumberString }}</h1>
         <highcharts :options="confirmedChartOptions"></highcharts>
       </div>
-      <div class="col-lg-4 col-sm-12">
+      <div class="col-lg-3 col-sm-12">
         <h6 class="card-subtitle mb-2 text-muted">Deaths</h6>
-        <h1 class="text-danger" v-if="this.selectedCountry !== undefined">{{ this.selectedCountry.TotalDeathsCount | toLocaleNumberString }}</h1>
+        <h1 class="text-warning" v-if="this.selectedCountry !== undefined">{{ this.selectedCountry.TotalDeathsCount | toLocaleNumberString }}</h1>
         <highcharts :options="deathChartOptions"></highcharts>
+      </div>
+      <div class="col-lg-3 col-sm-12">
+        <h6 class="card-subtitle mb-2 text-muted">Death Rate</h6>
+        <h1 class="text-danger" v-if="this.selectedCountry !== undefined">{{ this.selectedCountry | getDeathRate }} %</h1>
       </div>
     </div>
   </div>
@@ -146,6 +150,12 @@ export default {
     },
     toLocaleDateString(date) {
       return new Date(date).toLocaleDateString();
+    },
+    getDeathRate(selectedCountry) {
+      let totalDeaths = selectedCountry.TotalDeathsCount;
+      let totalConfirmedCases = selectedCountry.TotalCasesCount;
+      let deathRate = totalDeaths/totalConfirmedCases*100;
+      return (Math.round(deathRate * 100) / 100).toFixed(2);
     }
   },
   methods: {

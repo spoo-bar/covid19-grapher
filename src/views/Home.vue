@@ -2,7 +2,7 @@
   <div class="home">
     <LastUpdateTime />
     <div class="row">
-      <div class="col-lg-8">
+      <div class="col-lg-10">
         <div class="card">
           <div class="card-body">
             <h4 class="card-title">Quick info</h4>
@@ -21,7 +21,7 @@
           </div>
         </div>
       </div>
-      <div class="d-none d-lg-block col-lg-2">
+      <!-- <div class="d-none d-lg-block col-lg-2">
         <div class="card">
           <div class="card-body download-card">
             <h5 class="card-title">Download</h5>
@@ -43,7 +43,7 @@
             </p>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
     <br />
     <div class="card">
