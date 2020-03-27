@@ -62,6 +62,17 @@
         <CompareCountriesChart />
       </div>
     </div>
+    <br />
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Patient Percentage</h4>
+        <h6
+          class="card-subtitle mb-2 text-muted"
+        >Percentage represenatation of confirmed cases by country</h6>
+        <PatientPercentageChart />
+      </div>
+    </div>
+    <br />
   </div>
 </template>
 
@@ -72,6 +83,7 @@ import CompareCountriesChart from "@/components/CompareCountriesChart.vue";
 import QuickCountry from "@/components/QuickCountry.vue";
 import SetCountryDefault from "@/components/SetCountryDefault.vue";
 import LastUpdateTime from "@/components/LastUpdateTime.vue";
+import PatientPercentageChart from "@/components/PatientPercentageChart.vue"; 
 
 export default {
   name: "Home",
@@ -80,7 +92,8 @@ export default {
     CompareCountriesChart,
     QuickCountry,
     SetCountryDefault,
-    LastUpdateTime
+    LastUpdateTime,
+    PatientPercentageChart
   }
 };
 </script>
