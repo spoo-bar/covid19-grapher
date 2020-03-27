@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <LastUpdateTime />
     <div class="row">
       <div class="col-lg-8">
         <div class="card">
@@ -70,6 +71,7 @@ import NewCasesChart from "@/components/NewCasesChart.vue";
 import CompareCountriesChart from "@/components/CompareCountriesChart.vue";
 import QuickCountry from "@/components/QuickCountry.vue";
 import SetCountryDefault from "@/components/SetCountryDefault.vue";
+import LastUpdateTime from "@/components/LastUpdateTime.vue";
 
 export default {
   name: "Home",
@@ -77,7 +79,8 @@ export default {
     NewCasesChart,
     CompareCountriesChart,
     QuickCountry,
-    SetCountryDefault
+    SetCountryDefault,
+    LastUpdateTime
   }
 };
 </script>
