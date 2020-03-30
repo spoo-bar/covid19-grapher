@@ -1,6 +1,7 @@
 {
-  "name": "covid19-grapher",
-  "version": "0.1.0",
+  "name": "covid19-graphs",
+  "version": "0.1.1",
+  "description": "Some interesting charts regarding Covid19 spreading",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

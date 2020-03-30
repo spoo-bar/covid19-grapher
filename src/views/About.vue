@@ -1,7 +1,7 @@
 <template>
   <div class="about container">
     <h5>
-      Made with ❤ by
+      Made with ✌ by
       <a href="http://spoorthis.com" target="_blank">Spoorthi</a>
     </h5>
     <h6>Done to kill boredom during this quarantine period.</h6>
