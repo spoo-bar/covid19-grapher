@@ -43,7 +43,7 @@ export default {
         },
         series: [
           {
-            name: "Confirmed Cases",
+            name: "Confirmed Deaths",
             colorByPoint: true,
             data: []
           }
