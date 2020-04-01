@@ -1,5 +1,18 @@
 <template>
   <div class="death-rate-table">
+    <br />
+    <div class="form-group">
+      <div class="custom-control custom-switch">
+        <input
+          type="checkbox"
+          class="custom-control-input"
+          id="sort-order"
+          v-model="sortDecreasing"
+          v-on:change="onSortOrderChange()"
+        />
+        <label class="custom-control-label" for="sort-order">Sort in decreasing order</label>
+      </div>
+    </div>
     <div class="row">
       <table v-if="displayData1.length > 0" class="table col-lg-6">
         <thead class="thead-dark">
@@ -57,10 +70,10 @@ export default {
   data() {
     return {
       data: Data,
-      tableData: [],
       displayData1: [],
       displayData2: [],
-      defaultCountry: ""
+      defaultCountry: "",
+      sortDecreasing: true
     };
   },
   methods: {
@@ -70,22 +83,49 @@ export default {
       let deathRate = (totalDeaths / totalConfirmedCases) * 100;
       return (Math.round(deathRate * 100) / 100).toFixed(2);
     },
-    getCountryData(selectedCountry) {
-      return this.data.Data.filter(c => c.Name === selectedCountry)[0];
-    },
     loadData() {
+      let tableData = [];
+      this.displayData1 = [];
+      this.displayData2 = [];
+
       for (let country of this.data.Data) {
         let deathRate = this.getDeathRate(country);
-        let countryData = {
-          name: country.Name,
-          deathRate: deathRate
-        };
-        this.tableData.push(countryData);
+        if (deathRate > 0) {
+          let countryData = {
+            name: country.Name,
+            deathRate: deathRate
+          };
+          tableData.push(countryData);
+        }
       }
 
-      this.tableData.sort(
-        (a, b) => parseFloat(b.deathRate) - parseFloat(a.deathRate)
-      );
+      if (this.sortDecreasing) {
+        tableData.sort(
+          (a, b) => parseFloat(b.deathRate) - parseFloat(a.deathRate)
+        );
+      } else {
+        tableData.sort(
+          (a, b) => parseFloat(a.deathRate) - parseFloat(b.deathRate)
+        );
+      }
+
+      for (let i = 1; i <= 10; i++) {
+        this.displayData1.push({
+          rank: i,
+          name: tableData[i - 1].name,
+          deathRate: tableData[i - 1].deathRate
+        });
+      }
+      for (let i = 11; i <= 20; i++) {
+        this.displayData2.push({
+          rank: i,
+          name: tableData[i - 1].name,
+          deathRate: tableData[i - 1].deathRate
+        });
+      }
+    },
+    onSortOrderChange: function() {
+      this.loadData();
     },
     getDefaultCountry: function() {
       let defaultCountry = localStorage.getItem("defaultCountry");
@@ -98,26 +138,6 @@ export default {
   },
   mounted: function() {
     this.loadData();
-    for (let i = 1; i <= 10; i++) {
-      this.displayData1.push({
-        rank: i,
-        name: this.tableData[i-1].name,
-        deathRate: this.tableData[i-1].deathRate,
-        confirmedCases: this.getCountryData(this.tableData[i-1].name)
-          .TotalCasesCount,
-        deathCases: this.getCountryData(this.tableData[i-1].name).TotalDeathsCount
-      });
-    }
-    for (let i = 11; i <= 20; i++) {
-      this.displayData2.push({
-        rank: i,
-        name: this.tableData[i-1].name,
-        deathRate: this.tableData[i-1].deathRate,
-        confirmedCases: this.getCountryData(this.tableData[i-1].name)
-          .TotalCasesCount,
-        deathCases: this.getCountryData(this.tableData[i-1].name).TotalDeathsCount
-      });
-    }
     this.defaultCountry = this.getDefaultCountry();
   }
 };
