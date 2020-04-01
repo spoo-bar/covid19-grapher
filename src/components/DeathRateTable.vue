@@ -1,29 +1,18 @@
 <template>
   <div class="death-rate-table">
-    <br />
-    <div class="form-group">
-      <div class="custom-control custom-switch">
-        <input
-          type="checkbox"
-          class="custom-control-input"
-          id="sort-order"
-          v-model="sortDecreasing"
-          v-on:change="onSortOrderChange()"
-        />
-        <label class="custom-control-label" for="sort-order">Sort in decreasing order</label>
-      </div>
-    </div>
-    <div class="row">
-      <table v-if="displayData1.length > 0" class="table col-lg-6">
+    <div class="row justify-content-around">
+      <table v-if="displayData.length > 0" class="table col-lg-12">
         <thead class="thead-dark">
           <tr>
             <th scope="col">Rank</th>
             <th scope="col">Death Rate</th>
             <th scope="col">Name</th>
+            <th scope="col">Total Cases</th>
+            <th scope="col">Deaths</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="country in displayData1" :key="country.name">
+          <tr v-for="country in displayData" :key="country.name">
             <th scope="row">#{{ country.rank }}</th>
             <td>{{ country.deathRate }}%</td>
             <td>
@@ -32,29 +21,10 @@
                 class="badge badge-pill badge-secondary"
                 v-show="country.name === defaultCountry"
               >Default</span>
+              <span v-show="country.name ==='World'">🌏</span>
             </td>
-          </tr>
-        </tbody>
-      </table>
-      <table v-if="displayData2.length" class="table col-lg-6">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col">Rank</th>
-            <th scope="col">Death Rate</th>
-            <th scope="col">Name</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="country in displayData2" :key="country.name">
-            <th scope="row">#{{ country.rank }}</th>
-            <td>{{ country.deathRate }}%</td>
-            <td>
-              {{ country.name }}
-              <span
-                class="badge badge-pill badge-secondary"
-                v-show="country.name === defaultCountry"
-              >Default</span>
-            </td>
+            <td>{{ country.totalConfirmedCases | toLocaleNumberString }}</td>
+            <td>{{ country.totalDeathCount | toLocaleNumberString }}</td>
           </tr>
         </tbody>
       </table>
@@ -67,13 +37,17 @@ import Data from "../assets/data.json";
 
 export default {
   name: "DeathRateTable",
+  filters: {
+    toLocaleNumberString(number) {
+      let locale = navigator.language;
+      return new Number(number).toLocaleString(locale);
+    }
+  },
   data() {
     return {
       data: Data,
-      displayData1: [],
-      displayData2: [],
-      defaultCountry: "",
-      sortDecreasing: true
+      displayData: [],
+      defaultCountry: ""
     };
   },
   methods: {
@@ -85,12 +59,12 @@ export default {
     },
     loadData() {
       let tableData = [];
-      this.displayData1 = [];
-      this.displayData2 = [];
+      this.displayData = [];
 
+      let highestConfirmedCases = this.getHighestConfirmedCases();
       for (let country of this.data.Data) {
         let deathRate = this.getDeathRate(country);
-        if (deathRate > 0) {
+        if (deathRate > 0 && country.TotalCasesCount > highestConfirmedCases) {
           let countryData = {
             name: country.Name,
             deathRate: deathRate
@@ -98,34 +72,31 @@ export default {
           tableData.push(countryData);
         }
       }
-
-      if (this.sortDecreasing) {
-        tableData.sort(
-          (a, b) => parseFloat(b.deathRate) - parseFloat(a.deathRate)
-        );
-      } else {
-        tableData.sort(
-          (a, b) => parseFloat(a.deathRate) - parseFloat(b.deathRate)
-        );
-      }
+      tableData.sort(
+        (a, b) => parseFloat(b.deathRate) - parseFloat(a.deathRate)
+      );
 
       for (let i = 1; i <= 10; i++) {
-        this.displayData1.push({
+        let country = this.getCountryData(tableData[i - 1].name);
+        this.displayData.push({
           rank: i,
           name: tableData[i - 1].name,
-          deathRate: tableData[i - 1].deathRate
-        });
-      }
-      for (let i = 11; i <= 20; i++) {
-        this.displayData2.push({
-          rank: i,
-          name: tableData[i - 1].name,
-          deathRate: tableData[i - 1].deathRate
+          deathRate: tableData[i - 1].deathRate,
+          totalConfirmedCases: country.TotalCasesCount,
+          totalDeathCount: country.TotalDeathsCount
         });
       }
     },
-    onSortOrderChange: function() {
-      this.loadData();
+    getHighestConfirmedCases: function() {
+      let totalCasesList = this.data.Data.map(c => c.TotalCasesCount);
+      totalCasesList.sort((a, b) => b - a);
+      totalCasesList = totalCasesList.slice(0, 11);
+      totalCasesList.reverse();
+      // returning the 10th highest value
+      return parseInt(totalCasesList[0]);
+    },
+    getCountryData: function(selectedCountry) {
+      return this.data.Data.filter(c => c.Name === selectedCountry)[0];
     },
     getDefaultCountry: function() {
       let defaultCountry = localStorage.getItem("defaultCountry");
@@ -137,8 +108,8 @@ export default {
     }
   },
   mounted: function() {
-    this.loadData();
     this.defaultCountry = this.getDefaultCountry();
+    this.loadData();
   }
 };
 </script>

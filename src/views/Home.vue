@@ -96,6 +96,9 @@
             <h6
               class="card-subtitle mb-2 text-muted"
             >Countries ranked by death rates</h6>
+            <p class="card-text">
+              <small>The top ten countries with highest number of confirmed cases are considered.</small>
+            </p>
             <DeathRateTable />
           </div>
         </div>
