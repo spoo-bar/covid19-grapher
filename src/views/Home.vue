@@ -88,6 +88,20 @@
       </div>
     </div>
     <br />
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Death Rate Ranking</h4>
+            <h6
+              class="card-subtitle mb-2 text-muted"
+            >Countries ranked by death rates</h6>
+            <DeathRateTable />
+          </div>
+        </div>
+      </div>
+    </div>
+    <br />
   </div>
 </template>
 
@@ -100,6 +114,7 @@ import SetCountryDefault from "@/components/SetCountryDefault.vue";
 import LastUpdateTime from "@/components/LastUpdateTime.vue";
 import PatientPercentageChart from "@/components/PatientPercentageChart.vue";
 import DeadPatientPercentageChart from "@/components/DeadPatientPercentageChart.vue";
+import DeathRateTable from "@/components/DeathRateTable.vue";
 
 export default {
   name: "Home",
@@ -110,7 +125,8 @@ export default {
     SetCountryDefault,
     LastUpdateTime,
     PatientPercentageChart,
-    DeadPatientPercentageChart
+    DeadPatientPercentageChart,
+    DeathRateTable
   }
 };
 </script>
