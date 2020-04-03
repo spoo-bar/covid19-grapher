@@ -19,7 +19,7 @@
               {{ country.name }}
               <span
                 class="badge badge-pill badge-secondary"
-                v-show="country.name === defaultCountry"
+                v-show="country.name === defaultCountry && country.name !== 'World'"
               >Default</span>
               <span v-show="country.name ==='World'">🌏</span>
             </td>
