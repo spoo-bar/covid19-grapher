@@ -69,15 +69,8 @@ export default {
         },
         tooltip: {
           shared: true,
-          //useHTML: true,
-          //headerFormat: "<small>Day {point.key} Date - " + (this.selectedCountry.FirstCaseDate + this.selectedCountry.NewCases.DayCountSinceFirstCase) + "</small><br/>"
-          //headerFormat: "<small>Day {point.key} Date - </small><br/>"
-          formatter: function () {
-            //let currentDate = new Date(this.selectedCountry.FirstCaseDate);
-            //return this.boop;
-            //return this.x + ' - ' + this.boop;
-            return 'Day  '+ this.x +'  Date - '+  + '<br/>';
-          }
+          useHTML: true,
+          headerFormat: "<small>Day {point.key}</small><br/>"
         },
         xAxis: [
           {
@@ -104,8 +97,7 @@ export default {
       },
       data: Data,
       selectedCountry: undefined,
-      selectedCountryName: '',
-      boop: 'boop'
+      selectedCountryName: ''
     };
   },
   methods: {
