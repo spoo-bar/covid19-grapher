@@ -1,77 +1,64 @@
+import pandas as pd
 
-import csv
-import uuid
-import json
+"""
+locations_url = "https://covid.ourworldindata.org/data/ecdc/locations.csv"
+try:
+    LocationData = pd.read_csv("locations.csv", index_col=False, usecols=['location', 'continent', 'population'])
+except BaseException as err:
+    print(f'Downloading {locations_url} failed: {str(err)}')
+    exit
+"""
 
-places_added = dict()
-object_map = dict()
+LocationData = pd.read_csv("locations.csv", index_col=False, usecols=['location', 'continent', 'population'])
+LocationData.drop_duplicates(subset='location', inplace=True)
+temp_row = pd.Series({'location':"International", 'continent':None, 'population':None})
+temp_df = pd.DataFrame([temp_row])
+temp_df2 = pd.concat([LocationData, temp_df], ignore_index=True)
+temp_df2.sort_values(by=['location'], inplace=True)
+temp_row = pd.Series({'location':"World", 'continent':None, 'population':None})
+temp_df = pd.DataFrame([temp_row])
+LocationData = pd.concat([temp_df, temp_df2], ignore_index=True)
 
-class Location_class:
-    """
-    Object definition of each country in the locations.csv file
-    """
+
+class LocationClass:        
+    #Object class of each country in the locations.csv file
+      
     world_population = 0
 
-    def __init__(self, name, continent):
-        """
-        Object constructor for the class
-        """
-        self.name = name
-        self.continent = continent
-                
-    def __repr__ (self):
-        """
-        Representation of the class object
-        """
-        return {"Name":self.name,"Continent":self.continent,"Population":self.population}
+    def __init__(self, location, continent, population):
+        #Object constructor for the class
 
-    def set_population(self, population):
-        """
-        Set population for countries with same location entry in the file 
-        """
+        self.Name = location
+        self.Continent = continent
         try:
-            self.population = int(population)           
-        except ValueError:
-            self.population = 0
-        Location_class.world_population += self.population
-
-    def update_population(self, additional):
-        """
-        Update population for countries with same location entry in the file 
-        """
-        try:
-            self.population += int(additional)
-        except ValueError:
-            pass
-        else:
-            Location_class.world_population += int(additional)
-
-
-with open ("locations.csv", 'r') as locations_csv:
-    csv_reader = csv.reader(locations_csv)
-    next(csv_reader)
-    for line in csv_reader:
-        if (line[1] in places_added.keys()):
-            object_map[places_added[line[1]]].update_population(line[4])
-        else:
-            object_id = str(uuid.uuid4())
-            places_added[line[1]] = object_id
-            location = Location_class(line[1],line[2])
-            location.set_population(line[4])
-            object_map[object_id] = location
-
-object_id = str(uuid.uuid4())
-places_added["World"] = object_id
-location = Location_class("World", None)
-location.population = Location_class.world_population
-object_map[object_id] = location
-
-for key in object_map.keys():
-    print(object_map[key].__repr__())
-
+            self.Population = int(population)
+            LocationClass.world_population += self.Population        
+        except:
+            self.Population = None
             
+    
+    def create_attribute(self, label):
+        setattr(self, label, {})
+        #self.lable["DayCountSinceFirstOccurrence"] =
+        #self.lable["DayCount"] =
+        #self.lable["SevenDayAvgSinceFirstOccurrence"] =
+        #self.lable["SevenDayAvg"] =
 
-            
+
+class DataClass:
+    #Object class for the data elements (DayCount, DayCountSinceFirstOccurrence, SevenDayAvg, SevenDayAvgSinceFirstOccurrence)
+
+    def __init__(self, DayCount):
+        self.DayCount = DayCount
 
 
+object_list = list( LocationClass(row.location, row.continent, row.population) for index, row in LocationData.iterrows())
+newCases = pd.read_csv("new_cases.csv", index_col=False)
 
+for index, row in LocationData.iterrows():
+    location = row.location
+    print(location)
+    temp_arr = [r[location] for i, r in newCases.iterrows()]
+    daycount = DataClass(temp_arr)
+
+print(vars(daycount))
