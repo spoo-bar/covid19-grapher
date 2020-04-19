@@ -1,77 +1,96 @@
-
-import csv
-import uuid
+import pandas as pd
+import datetime
 import json
 
-places_added = dict()
-object_map = dict()
+LocationData = pd.read_csv("locations.csv", index_col=False, usecols=['location', 'continent', 'population'])
+LocationData.drop_duplicates(subset='location', inplace=True)
+temp_row = pd.Series({'location':"International", 'continent':None, 'population':None})
+temp_df = pd.DataFrame([temp_row])
+temp_df2 = pd.concat([LocationData, temp_df], ignore_index=True)
+temp_df2.sort_values(by=['location'], inplace=True)
+temp_row = pd.Series({'location':"World", 'continent':None, 'population':None})
+temp_df = pd.DataFrame([temp_row])
+LocationData = pd.concat([temp_df, temp_df2], ignore_index=True)
 
-class Location_class:
-    """
-    Object definition of each country in the locations.csv file
-    """
+
+class LocationClass:        
+    #Object class of each country in the locations.csv file
+      
     world_population = 0
 
-    def __init__(self, name, continent):
-        """
-        Object constructor for the class
-        """
-        self.name = name
-        self.continent = continent
-                
-    def __repr__ (self):
-        """
-        Representation of the class object
-        """
-        return {"Name":self.name,"Continent":self.continent,"Population":self.population}
+    def __init__(self, location, continent, population):
+        #Object constructor for the class Location
 
-    def set_population(self, population):
-        """
-        Set population for countries with same location entry in the file 
-        """
+        self.Name = location
+        self.Continent = continent
         try:
-            self.population = int(population)           
-        except ValueError:
-            self.population = 0
-        Location_class.world_population += self.population
+            self.Population = int(population)
+            LocationClass.world_population += self.Population        
+        except:
+            self.Population = None
+              
+    def AddData(self, CasesData, DeathsData, FirstCase, FirstDeath, TotalCases, TotalDeaths):
+        #Function to add the output dataset to the location object
 
-    def update_population(self, additional):
-        """
-        Update population for countries with same location entry in the file 
-        """
-        try:
-            self.population += int(additional)
-        except ValueError:
-            pass
-        else:
-            Location_class.world_population += int(additional)
+        setattr(self, "Cases", CasesData)
+        setattr(self, "Deaths", DeathsData)
+        self.FirstCaseDate = FirstCase
+        self.FirstDeathDate = FirstDeath
+        self.TotalCases = TotalCases
+        self.TotalDeaths = TotalDeaths
 
 
-with open ("locations.csv", 'r') as locations_csv:
-    csv_reader = csv.reader(locations_csv)
-    next(csv_reader)
-    for line in csv_reader:
-        if (line[1] in places_added.keys()):
-            object_map[places_added[line[1]]].update_population(line[4])
-        else:
-            object_id = str(uuid.uuid4())
-            places_added[line[1]] = object_id
-            location = Location_class(line[1],line[2])
-            location.set_population(line[4])
-            object_map[object_id] = location
+def evalData(Count_arr):
+   #Function to evaluate the output dataset
 
-object_id = str(uuid.uuid4())
-places_added["World"] = object_id
-location = Location_class("World", None)
-location.population = Location_class.world_population
-object_map[object_id] = location
-
-for key in object_map.keys():
-    print(object_map[key].__repr__())
-
+    DateCounter = datetime.datetime(2019, 12, 31)
+    result = dict()
+    result["DayCount"] = list()   
+    result["SevenDayAvg"] = list()  
+    result["TotalCount"] = list()  
+    found = False
+    for count in Count_arr:
+        if not count:
+            count = 0
+        if count and not found:               
+            found = True
+            FirstDate = DateCounter
+        result["DayCount"].append(count)
+        result["TotalCount"].append(sum(result["DayCount"]))
+        CurrentTotal = result["TotalCount"][-1]
+        result["SevenDayAvg"].append(round(CurrentTotal/7, 3))
+        DateCounter += datetime.timedelta(days=1)
+    try:
+        DayDifference = (FirstDate -  datetime.datetime(2019, 12, 31)).days
+        FirstDate_str = FirstDate.strftime('%Y-%m-%dT%H:%M:%S')
+    except:
+        DayDifference = -1
+        FirstDate_str = None
+    result["DayCountSinceFirst"] = result["DayCount"][DayDifference : ]
+    result["SevenDayAvgSinceFirst"] = result["SevenDayAvg"][DayDifference : ]
+    result["TotalCountSinceFirst"] = result["TotalCount"][DayDifference : ] 
+    return (FirstDate_str, result, CurrentTotal)
             
 
-            
+object_list = list( LocationClass(row.location, row.continent, row.population) for index, row in LocationData.iterrows())
+object_list[0].Population = LocationClass.world_population
+Cases_csv = pd.read_csv("new_cases.csv", index_col=False)
+Cases_csv.fillna(0, inplace=True)
+Deaths_csv = pd.read_csv("new_deaths.csv", index_col=False)
+Deaths_csv.fillna(0, inplace=True)
 
+output = dict()
+output["Source"] = "https://ourworldindata.org/coronavirus-source-data"
+output["LastUpdateTime"] = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
+output["Data"] = list()
+for place in object_list:
+    location = place.Name
+    Cases_arr = [r[location] for i, r in Cases_csv.iterrows()]
+    FirstCase, CasesData, TotalCases = evalData(Cases_arr)
+    Deaths_arr = [r[location] for i, r in Deaths_csv.iterrows()]
+    FirstDeath, DeathsData, TotalDeaths = evalData(Deaths_arr)
+    place.AddData(CasesData, DeathsData, FirstCase, FirstDeath, TotalCases, TotalDeaths)
+    output["Data"].append(vars(place))
 
-
+with open('data.json', 'w') as output_file:
+    json.dump(output, output_file)
