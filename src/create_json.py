@@ -29,48 +29,51 @@ class LocationClass:
         except:
             self.Population = None
               
-    def AddData(self, CasesData, DeathsData):
+    def AddData(self, CasesData, DeathsData, FirstCase, FirstDeath, TotalCases, TotalDeaths):
         #Function to add the output dataset to the location object
 
         setattr(self, "Cases", CasesData)
         setattr(self, "Deaths", DeathsData)
+        self.FirstCaseDate = FirstCase
+        self.FirstDeathDate = FirstDeath
+        self.TotalCases = TotalCases
+        self.TotalDeaths = TotalDeaths
 
 
 def evalData(Count_arr):
    #Function to evaluate the output dataset
 
-    tempDate = datetime.datetime(2019, 12, 31)
+    DateCounter = datetime.datetime(2019, 12, 31)
     result = dict()
-    result["DayCount"] = list()
-    result["DayCountSinceFirst"] = list()
-    result["SevenDayAvg"] = list()
-    result["SevenDayAvgSinceFirst"] = list()
-    result["Total"] = list()
-    result["TotalSinceFirst"] = list()
+    result["DayCount"] = list()   
+    result["SevenDayAvg"] = list()  
+    result["TotalCount"] = list()  
     found = False
     for count in Count_arr:
         if not count:
-            count = 0.0
-        if found:               
-            result["DayCountSinceFirst"].append(count)
-            result["TotalSinceFirst"].append(sum(result["DayCountSinceFirst"]))
-            result["SevenDayAvgSinceFirst"].append(result["TotalSinceFirst"][-1]/7)
-        else:
-            if count:
-                found = True
-                result["FirstDate"] = tempDate.strftime('%Y-%m-%dT%H:%M:%S')
-                result["DayCountSinceFirst"].append(count)
-                result["TotalSinceFirst"].append(sum(result["DayCountSinceFirst"]))
-                result["SevenDayAvgSinceFirst"].append(result["TotalSinceFirst"][-1]/7)
+            count = 0
+        if count and not found:               
+            found = True
+            FirstDate = DateCounter
         result["DayCount"].append(count)
-        result["Total"].append(sum(result["DayCount"]))
-        result["SevenDayAvg"].append(result["Total"][-1]/7)
-        tempDate += datetime.timedelta(days=1)
-
-    return result
+        result["TotalCount"].append(sum(result["DayCount"]))
+        CurrentTotal = result["TotalCount"][-1]
+        result["SevenDayAvg"].append(round(CurrentTotal/7, 3))
+        DateCounter += datetime.timedelta(days=1)
+    try:
+        DayDifference = (FirstDate -  datetime.datetime(2019, 12, 31)).days
+        FirstDate_str = FirstDate.strftime('%Y-%m-%dT%H:%M:%S')
+    except:
+        DayDifference = -1
+        FirstDate_str = None
+    result["DayCountSinceFirst"] = result["DayCount"][DayDifference : ]
+    result["SevenDayAvgSinceFirst"] = result["SevenDayAvg"][DayDifference : ]
+    result["TotalCountSinceFirst"] = result["TotalCount"][DayDifference : ] 
+    return (FirstDate_str, result, CurrentTotal)
             
 
 object_list = list( LocationClass(row.location, row.continent, row.population) for index, row in LocationData.iterrows())
+object_list[0].Population = LocationClass.world_population
 Cases_csv = pd.read_csv("new_cases.csv", index_col=False)
 Cases_csv.fillna(0, inplace=True)
 Deaths_csv = pd.read_csv("new_deaths.csv", index_col=False)
@@ -83,13 +86,11 @@ output["Data"] = list()
 for place in object_list:
     location = place.Name
     Cases_arr = [r[location] for i, r in Cases_csv.iterrows()]
-    CasesData = evalData(Cases_arr)
+    FirstCase, CasesData, TotalCases = evalData(Cases_arr)
     Deaths_arr = [r[location] for i, r in Deaths_csv.iterrows()]
-    DeathsData = evalData(Deaths_arr)
-    place.AddData(CasesData, DeathsData)
+    FirstDeath, DeathsData, TotalDeaths = evalData(Deaths_arr)
+    place.AddData(CasesData, DeathsData, FirstCase, FirstDeath, TotalCases, TotalDeaths)
     output["Data"].append(vars(place))
-
-
 
 with open('data.json', 'w') as output_file:
     json.dump(output, output_file)
