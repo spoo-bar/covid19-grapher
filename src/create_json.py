@@ -2,6 +2,7 @@ import pandas as pd
 import datetime
 import json
 
+
 LocationData = pd.read_csv("locations.csv", index_col=False, usecols=['location', 'continent', 'population'])
 LocationData.drop_duplicates(subset='location', inplace=True)
 temp_row = pd.Series({'location':"International", 'continent':None, 'population':None})
