@@ -78,11 +78,11 @@ export default {
     },
   },
   mounted: function() {
-    let worldTotalCases = this.getCountryData("World").TotalCasesCount;
+    let worldTotalCases = this.getCountryData("World").TotalCases;
     let chartData = [];
     for (let country of this.data.Data) {
       if (country.Name !== "World") {
-        let countryCases = country.TotalCasesCount;
+        let countryCases = country.TotalCases;
         let countryPercentage = (countryCases / worldTotalCases) * 100;
         let countryData = {
           name: country.Name,
