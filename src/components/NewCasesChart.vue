@@ -110,8 +110,8 @@ export default {
     },
     setSelectedCountryData: function() {
       this.chartOptions.title.text = this.selectedCountry.Name;
-      this.chartOptions.series[0].data = this.selectedCountry.NewCases.DayCountSinceFirstCase;
-      this.chartOptions.series[1].data = this.selectedCountry.NewCases.SevenDayAvgSinceFirstCase;
+      this.chartOptions.series[0].data = this.selectedCountry.Cases.DayCountSinceFirst;
+      this.chartOptions.series[1].data = this.selectedCountry.Cases.SevenDayAvgSinceFirst;
     },
     getDefaultCountry: function() {
       let defaultCountry = localStorage.getItem("defaultCountry");

@@ -70,7 +70,7 @@
             <h4 class="card-title">Patient Percentage</h4>
             <h6
               class="card-subtitle mb-2 text-muted"
-            >Percentage represenatation of confirmed cases by country</h6>
+            >Percentage representation of confirmed cases by country</h6>
             <PatientPercentageChart />
           </div>
         </div>
@@ -81,7 +81,7 @@
             <h4 class="card-title">Dead Patients Percentage</h4>
             <h6
               class="card-subtitle mb-2 text-muted"
-            >Percentage represenatation of dead patients cases by country</h6>
+            >Percentage representation of dead patients cases by country</h6>
             <DeadPatientPercentageChart />
           </div>
         </div>
