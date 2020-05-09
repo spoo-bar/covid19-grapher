@@ -135,9 +135,9 @@ export default {
     },
     getCovidData: function(country) {
       if (this.useSevenDayAverage) {
-        return country.NewCases.SevenDayAvgSinceFirstCase;
+        return country.Cases.SevenDayAvgSinceFirst;
       } else {
-        return country.NewCases.DayCountSinceFirstCase;
+        return country.Cases.DayCountSinceFirst;
       }
     },
     setSelectedCountryData: function() {
