@@ -3,7 +3,7 @@ import datetime
 import json
 import shutil
 
-temp_folder = "data/tmp"
+temp_folder = "./data/tmp"
 LocationData = pd.read_csv(temp_folder+"/locations.csv", index_col=False, usecols=['location', 'continent', 'population'])
 LocationData.drop_duplicates(subset='location', inplace=True)
 LocationData.sort_values(by=['location'], inplace=True)
@@ -98,7 +98,7 @@ for place in object_list:
     place.AddData(CasesData, DeathsData, FirstCase, FirstDeath, TotalCases, TotalDeaths)
     output["Data"].append(vars(place))
 
-with open('src/assets/data.json', 'w') as output_file:
+with open('./src/assets/data.json', 'w') as output_file:
     json.dump(output, output_file)
 
 try:
