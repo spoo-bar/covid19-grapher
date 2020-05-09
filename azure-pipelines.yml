@@ -26,9 +26,11 @@ steps:
 - script: python ./data/get_files.py
   displayName: 'Get source data'
 
-- script: python ./data/create_json.py
+- script: |
+    mkdir ./src/assets
+    python ./data/create_json.py  
   displayName: 'Process input data'
-
+  
 - script: |
     npm install
     npm run build
