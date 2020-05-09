@@ -27,12 +27,12 @@
       </div>
       <div class="col-lg-3 col-sm-12">
         <h6 class="card-subtitle mb-2 text-muted">Confirmed Cases</h6>
-        <h1 class="text-info" v-if="this.selectedCountry !== undefined">{{ this.selectedCountry.TotalCases | toLocaleNumberString }}</h1>
+        <h1 class="text-info" v-if="this.selectedCountry !== undefined">{{ this.selectedCountry.TotalCasesCount | toLocaleNumberString }}</h1>
         <highcharts :options="confirmedChartOptions"></highcharts>
       </div>
       <div class="col-lg-3 col-sm-12">
         <h6 class="card-subtitle mb-2 text-muted">Deaths</h6>
-        <h1 class="text-warning" v-if="this.selectedCountry !== undefined">{{ this.selectedCountry.TotalDeaths | toLocaleNumberString }}</h1>
+        <h1 class="text-warning" v-if="this.selectedCountry !== undefined">{{ this.selectedCountry.TotalDeathsCount | toLocaleNumberString }}</h1>
         <highcharts :options="deathChartOptions"></highcharts>
       </div>
       <div class="col-lg-3 col-sm-12">
@@ -152,8 +152,8 @@ export default {
       return new Date(date).toLocaleDateString();
     },
     getDeathRate(selectedCountry) {
-      let totalDeaths = selectedCountry.TotalDeaths;
-      let totalConfirmedCases = selectedCountry.TotalCases;
+      let totalDeaths = selectedCountry.TotalDeathsCount;
+      let totalConfirmedCases = selectedCountry.TotalCasesCount;
       let deathRate = totalDeaths/totalConfirmedCases*100;
       return (Math.round(deathRate * 100) / 100).toFixed(2);
     }
@@ -167,8 +167,8 @@ export default {
       this.setSelectedCountryData();
     },
     setSelectedCountryData: function() {
-      this.confirmedChartOptions.series[0].data = this.selectedCountry.Cases.TotalCountSinceFirst;
-      this.deathChartOptions.series[0].data = this.selectedCountry.Deaths.DayCountSinceFirst;
+      this.confirmedChartOptions.series[0].data = this.selectedCountry.TotalCases.DayCountSinceFirstCase;
+      this.deathChartOptions.series[0].data = this.selectedCountry.NewDeaths.DayCountSinceFirstCase;
     },
     getDefaultCountry: function() {
       let defaultCountry = localStorage.getItem("defaultCountry");
