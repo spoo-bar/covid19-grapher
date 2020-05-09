@@ -10,10 +10,24 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.8'
+  displayName: 'Install Python 3.8.0'
+
 - task: NodeTool@0
   inputs:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
+
+- script: pip3 install -r /data/requirements.txt
+  displayName: 'Install python required modules'
+
+- script: python /data/get_files.py
+  displayName: 'Get source data'
+
+- script: python /data/create_json.py
+  displayName: 'Process input data'
 
 - script: |
     npm install
