@@ -1,9 +1,10 @@
 import pandas as pd
 import datetime
 import json
+import shutil
 
-
-LocationData = pd.read_csv("src/assets/locations.csv", index_col=False, usecols=['location', 'continent', 'population'])
+temp_folder = "data/tmp"
+LocationData = pd.read_csv(temp_folder+"/locations.csv", index_col=False, usecols=['location', 'continent', 'population'])
 LocationData.drop_duplicates(subset='location', inplace=True)
 LocationData.sort_values(by=['location'], inplace=True)
 temp_row = pd.Series({'location':"World", 'continent':None, 'population':None})
@@ -79,9 +80,9 @@ def evalData(Count_arr):
 
 object_list = list( LocationClass(row.location, row.continent, row.population) for index, row in LocationData.iterrows())
 object_list[0].Population = LocationClass.world_population
-Cases_csv = pd.read_csv("src/assets/new_cases.csv", index_col=False)
+Cases_csv = pd.read_csv(temp_folder+"/new_cases.csv", index_col=False)
 Cases_csv.fillna(0, inplace=True)
-Deaths_csv = pd.read_csv("src/assets/new_deaths.csv", index_col=False)
+Deaths_csv = pd.read_csv(temp_folder+"/new_deaths.csv", index_col=False)
 Deaths_csv.fillna(0, inplace=True)
 
 output = dict()
@@ -99,3 +100,9 @@ for place in object_list:
 
 with open('src/assets/data.json', 'w') as output_file:
     json.dump(output, output_file)
+
+try:
+    shutil.rmtree(temp_folder)
+except OSError:
+    print (f"CSV File cleanup failed")
+    exit(1)
