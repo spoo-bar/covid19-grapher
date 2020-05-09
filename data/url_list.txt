@@ -1,3 +1,0 @@
-https://covid.ourworldindata.org/data/ecdc/locations.csv
-https://covid.ourworldindata.org/data/ecdc/new_cases.csv
-https://covid.ourworldindata.org/data/ecdc/new_deaths.csv

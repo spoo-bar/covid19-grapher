@@ -52,8 +52,8 @@ export default {
   },
   methods: {
     getDeathRate(selectedCountry) {
-      let totalDeaths = selectedCountry.TotalDeaths;
-      let totalConfirmedCases = selectedCountry.TotalCases;
+      let totalDeaths = selectedCountry.TotalDeathsCount;
+      let totalConfirmedCases = selectedCountry.TotalCasesCount;
       let deathRate = (totalDeaths / totalConfirmedCases) * 100;
       return (Math.round(deathRate * 100) / 100).toFixed(2);
     },
@@ -64,7 +64,7 @@ export default {
       let highestConfirmedCases = this.getHighestConfirmedCases();
       for (let country of this.data.Data) {
         let deathRate = this.getDeathRate(country);
-        if (deathRate > 0 && country.TotalCases > highestConfirmedCases) {
+        if (deathRate > 0 && country.TotalCasesCount > highestConfirmedCases) {
           let countryData = {
             name: country.Name,
             deathRate: deathRate
@@ -82,13 +82,13 @@ export default {
           rank: i,
           name: tableData[i - 1].name,
           deathRate: tableData[i - 1].deathRate,
-          totalConfirmedCases: country.TotalCases,
-          totalDeathCount: country.TotalDeaths
+          totalConfirmedCases: country.TotalCasesCount,
+          totalDeathCount: country.TotalDeathsCount
         });
       }
     },
     getHighestConfirmedCases: function() {
-      let totalCasesList = this.data.Data.map(c => c.TotalCases);
+      let totalCasesList = this.data.Data.map(c => c.TotalCasesCount);
       totalCasesList.sort((a, b) => b - a);
       totalCasesList = totalCasesList.slice(0, 11);
       totalCasesList.reverse();
