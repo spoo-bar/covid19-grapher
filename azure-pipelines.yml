@@ -23,12 +23,12 @@ steps:
 - script: pip3 install -r ./data/requirements.txt
   displayName: 'Install python required modules'
 
-- script: python ./data/get_files.py
+- script: python ./data/download_source_data.py
   displayName: 'Get source data'
 
 - script: |
     mkdir ./src/assets
-    python ./data/create_json.py  
+    python ./data/generate_data_json.py  
   displayName: 'Process input data'
   
 - script: |
