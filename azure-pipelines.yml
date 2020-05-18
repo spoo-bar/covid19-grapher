@@ -37,9 +37,8 @@ steps:
   
 - task: CopyFiles@2
   inputs:
-    SourceFolder: './dist'
-    Contents: '**'
-    TargetFolder: '$env:BUILD_ARTIFACTSTAGINGDIRECTORY'
+    sourceFolder: $(Build.SourcesDirectory)
+    targetFolder: $(Build.ArtifactStagingDirectory)
 
   displayName: 'Copying dist to staging directory'
 - task: PublishBuildArtifacts@1
