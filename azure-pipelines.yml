@@ -35,7 +35,7 @@ steps:
     npm run build
   displayName: 'npm install and build'
   
-- script: cp -avr ./dist  $env:BUILD_ARTIFACTSTAGINGDIRECTORY/dist
+- script: cp -RT ./dist  $env:BUILD_ARTIFACTSTAGINGDIRECTORY
   displayName: 'Copying dist to staging directory'
 - task: PublishBuildArtifacts@1
   inputs:
