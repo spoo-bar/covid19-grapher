@@ -36,7 +36,7 @@ steps:
   displayName: 'npm install and build'
   
 - script: cp ./dist  $env:BUILD_ARTIFACTSTAGINGDIRECTORY/dist
-
+  displayName: 'Copying dist to staging directory'
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
