@@ -35,7 +35,7 @@ steps:
     npm run build
   displayName: 'npm install and build'
   
-- powershell: Copy-Item './dist' -Destination '$env:BUILD_ARTIFACTSTAGINGDIRECTORY/dist'
+- script: cp ./dist  $env:BUILD_ARTIFACTSTAGINGDIRECTORY/dist
 
 - task: PublishBuildArtifacts@1
   inputs:
