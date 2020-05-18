@@ -27,7 +27,6 @@ steps:
   displayName: 'Get source data'
 
 - script: |
-    mkdir ./src/assets
     python ./data/generate_data_json.py  
   displayName: 'Process input data'
   
