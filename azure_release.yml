@@ -25,8 +25,8 @@ steps:
     password: '$(FTPPassword)'
     rootDirectory: '$(System.ArtifactsDirectory)/drop'
     filePatterns: '**'
-    remoteDirectory: '/upload/$(Build.BuildId)/'
+    remoteDirectory: '/'
     clean: false
     cleanContents: false
-    preservePaths: false
+    preservePaths: true
     trustSSL: false
