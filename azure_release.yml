@@ -24,7 +24,7 @@ steps:
     username: '$(FTPUsername)'
     password: '$(FTPPassword)'
     rootDirectory: '$(System.ArtifactsDirectory)'
-    filePatterns: '/dist/.'
+    filePatterns: '/drop/.'
     remoteDirectory: '/upload/$(Build.BuildId)/'
     clean: false
     cleanContents: false
