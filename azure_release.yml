@@ -36,6 +36,6 @@ steps:
     filePatterns: '**'
     remoteDirectory: '/'
     clean: false
-    cleanContents: false
+    cleanContents: true
     preservePaths: true
     trustSSL: false
