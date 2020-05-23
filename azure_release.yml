@@ -22,7 +22,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: '(Get-Content index.html).replace(''%%GTAG_ID%%'', $env:GTAG_ID) | Set-Content index.html'
-    workingDirectory: '$(Build.ArtifactsDirectory)/drop'
+    workingDirectory: '$(System.ArtifactsDirectory)/drop'
   displayName: Replacing Google Analytics tag
   
 
