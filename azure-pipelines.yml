@@ -30,19 +30,27 @@ steps:
     python ./data/generate_data_json.py  
   displayName: 'Process input data'
   
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: '(Get-Content index.html).replace(''%%GTAG_ID%%'', $env:GTAG_ID) | Set-Content index.html'
+    workingDirectory: '$(Build.SourcesDirectory)/public'
+  displayName: Replacing Google Analytics tag
+  
 - script: |
     npm install
     npm run build
-  displayName: 'npm install and build'
+  displayName: 'Build : npm install and build'
   
 - task: CopyFiles@2
   inputs:
     sourceFolder: $(Build.SourcesDirectory)/dist
     targetFolder: $(Build.ArtifactStagingDirectory)
-  displayName: 'Copying dist to staging directory'
+  displayName: 'Copying distributable to staging directory'
 
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
+  displayName: Publishing Artifact
