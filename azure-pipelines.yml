@@ -29,14 +29,7 @@ steps:
 - script: |
     python ./data/generate_data_json.py  
   displayName: 'Process input data'
-  
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: '(Get-Content index.html).replace(''%%GTAG_ID%%'', $(GTAG_ID)) | Set-Content index.html'
-    workingDirectory: '$(Build.SourcesDirectory)/public'
-  displayName: Replacing Google Analytics tag
-  
+    
 - script: |
     npm install
     npm run build
