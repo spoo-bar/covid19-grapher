@@ -10,12 +10,40 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.8'
+  displayName: 'Install Python 3.8.0'
+
 - task: NodeTool@0
   inputs:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
+- script: pip3 install -r ./data/requirements.txt
+  displayName: 'Install python required modules'
+
+- script: python ./data/download_source_data.py
+  displayName: 'Get source data'
+
+- script: |
+    python ./data/generate_data_json.py  
+  displayName: 'Process input data'
+    
 - script: |
     npm install
     npm run build
-  displayName: 'npm install and build'
+  displayName: 'Build : npm install and build'
+  
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: $(Build.SourcesDirectory)/dist
+    targetFolder: $(Build.ArtifactStagingDirectory)
+  displayName: 'Copying distributable to staging directory'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+  displayName: Publishing Artifact

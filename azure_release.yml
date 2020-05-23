@@ -1,0 +1,41 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+- task: DownloadBuildArtifacts@0
+  inputs:
+    buildType: 'specific'
+    project: '139ad5df-0567-4c6b-b97b-8ec27d7b13dc'
+    pipeline: '6'
+    buildVersionToDownload: 'latestFromBranch'
+    branchName: 'refs/heads/p33ves_changes'
+    downloadType: 'single'
+    artifactName: 'drop'
+    downloadPath: '$(System.ArtifactsDirectory)'
+
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: '(Get-Content index.html).replace(''%%GTAG_ID%%'', $env:GTAG_ID) | Set-Content index.html'
+    workingDirectory: '$(System.ArtifactsDirectory)/drop'
+  displayName: Replacing Google Analytics tag
+  
+
+- task: FtpUpload@2
+  inputs:
+    credentialsOption: 'inputs'
+    serverUrl: '$(FTPServerUrl)'
+    username: '$(FTPUsername)'
+    password: '$(FTPPassword)'
+    rootDirectory: '$(System.ArtifactsDirectory)/drop'
+    filePatterns: '**'
+    remoteDirectory: '/'
+    clean: false
+    cleanContents: false
+    preservePaths: true
+    trustSSL: false
