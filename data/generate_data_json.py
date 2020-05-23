@@ -99,7 +99,7 @@ Deaths_csv.fillna(0, inplace=True)
 
 output = dict()
 output["Source"] = "https://ourworldindata.org/coronavirus-source-data"
-output["LastUpdateTime"] = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+output["LastUpdateTime"] = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc).isoformat()
 output["Data"] = list()
 for place in object_list:
     location = place.Name
