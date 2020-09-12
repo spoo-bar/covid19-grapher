@@ -27,17 +27,17 @@
       </div>
       <div class="col-lg-3 col-sm-12">
         <h6 class="card-subtitle mb-2 text-muted">Confirmed Cases</h6>
-        <h1 class="text-info" v-if="this.selectedCountry !== undefined">{{ this.selectedCountry.TotalCases | toLocaleNumberString }}</h1>
+        <h2 class="text-info" v-if="this.selectedCountry !== undefined">{{ this.selectedCountry.TotalCases | toLocaleNumberString }}</h2>
         <highcharts :options="confirmedChartOptions"></highcharts>
       </div>
       <div class="col-lg-3 col-sm-12">
         <h6 class="card-subtitle mb-2 text-muted">Deaths</h6>
-        <h1 class="text-warning" v-if="this.selectedCountry !== undefined">{{ this.selectedCountry.TotalDeaths | toLocaleNumberString }}</h1>
+        <h2 class="text-warning" v-if="this.selectedCountry !== undefined">{{ this.selectedCountry.TotalDeaths | toLocaleNumberString }}</h2>
         <highcharts :options="deathChartOptions"></highcharts>
       </div>
       <div class="col-lg-3 col-sm-12">
         <h6 class="card-subtitle mb-2 text-muted">Death Rate</h6>
-        <h1 class="text-danger" v-if="this.selectedCountry !== undefined">{{ this.selectedCountry | getDeathRate }}<small>%</small></h1>
+        <h2 class="text-danger" v-if="this.selectedCountry !== undefined">{{ this.selectedCountry | getDeathRate }}<small>%</small></h2>
       </div>
     </div>
   </div>
