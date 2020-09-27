@@ -64,6 +64,29 @@
     </div>
     <br />
     <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Death Rate Ranking</h4>
+            <h6
+              class="card-subtitle mb-2 text-muted"
+            >Countries ranked by death rates</h6>
+            <p class="card-text">
+              <small>The top ten countries with highest number of confirmed cases are considered.</small>
+            </p>
+            <DeathRateTable />
+          </div>
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class="alert alert-dismissible alert-warning">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <strong>This project is at its end-of-life</strong> The visualization data will be automatically updated daily. 
+      However, there will be no new features or bug fixes. In case you need to contact me, <a href="mailto:s.spoorti@gmail.com" class="alert-link"> click here</a>
+    </div>
+    <br />
+    <div class="row">
       <div class="col-lg-6">
         <div class="card">
           <div class="card-body">
@@ -88,23 +111,7 @@
       </div>
     </div>
     <br />
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="card">
-          <div class="card-body">
-            <h4 class="card-title">Death Rate Ranking</h4>
-            <h6
-              class="card-subtitle mb-2 text-muted"
-            >Countries ranked by death rates</h6>
-            <p class="card-text">
-              <small>The top ten countries with highest number of confirmed cases are considered.</small>
-            </p>
-            <DeathRateTable />
-          </div>
-        </div>
-      </div>
-    </div>
-    <br />
+    
   </div>
 </template>
 
