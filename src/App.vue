@@ -19,9 +19,9 @@
           <li class="nav-item">
             <router-link to="/about" class="nav-link">About</router-link>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link" href="https://forms.gle/HGUSUm8gnnWwaS3C8" target="_blank">Feedback</a>
-          </li>
+          </li> -->
           <li class="nav-item">
             <a
               class="nav-link"
