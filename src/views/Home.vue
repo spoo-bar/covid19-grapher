@@ -86,31 +86,6 @@
       However, there will be no new features or bug fixes. In case you need to contact me, <a href="mailto:s.spoorti@gmail.com" class="alert-link"> click here</a>
     </div>
     <br />
-    <div class="row">
-      <div class="col-lg-6">
-        <div class="card">
-          <div class="card-body">
-            <h4 class="card-title">Patient Percentage</h4>
-            <h6
-              class="card-subtitle mb-2 text-muted"
-            >Percentage representation of confirmed cases by country</h6>
-            <PatientPercentageChart />
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="card">
-          <div class="card-body">
-            <h4 class="card-title">Dead Patients Percentage</h4>
-            <h6
-              class="card-subtitle mb-2 text-muted"
-            >Percentage representation of dead patients cases by country</h6>
-            <DeadPatientPercentageChart />
-          </div>
-        </div>
-      </div>
-    </div>
-    <br />
     
   </div>
 </template>
@@ -122,8 +97,6 @@ import CompareCountriesChart from "@/components/CompareCountriesChart.vue";
 import QuickCountry from "@/components/QuickCountry.vue";
 import SetCountryDefault from "@/components/SetCountryDefault.vue";
 import LastUpdateTime from "@/components/LastUpdateTime.vue";
-import PatientPercentageChart from "@/components/PatientPercentageChart.vue";
-import DeadPatientPercentageChart from "@/components/DeadPatientPercentageChart.vue";
 import DeathRateTable from "@/components/DeathRateTable.vue";
 
 export default {
@@ -134,8 +107,6 @@ export default {
     QuickCountry,
     SetCountryDefault,
     LastUpdateTime,
-    PatientPercentageChart,
-    DeadPatientPercentageChart,
     DeathRateTable
   }
 };
